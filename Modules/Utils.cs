@@ -25,6 +25,7 @@ namespace TOHE;
 
 public static class Utils
 {
+    
     private static readonly DateTime timeStampStartTime = new(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
     public static long GetTimeStamp(DateTime? dateTime = null) => (long)((dateTime ?? DateTime.Now).ToUniversalTime() - timeStampStartTime).TotalSeconds;
     public static void ErrorEnd(string text)
@@ -701,7 +702,7 @@ public static class Utils
     public static void CopyCurrentSettings()
     {
         var sb = new StringBuilder();
-        if (Options.HideGameSettings.GetBool() && !AmongUsClient.Instance.AmHost)
+        if (Options.CurrentGameMode != CustomGameMode.TOEX || Options.AllModMode.GetBool()) if (Options.HideGameSettings.GetBool() && !AmongUsClient.Instance.AmHost)
         {
             ClipboardHelper.PutClipboardString(GetString("Message.HideGameSettings"));
             return;
@@ -938,7 +939,7 @@ public static class Utils
     }
     public static void CheckTerroristWin(GameData.PlayerInfo Terrorist)
     {
-        if (!AmongUsClient.Instance.AmHost) return;
+        if (Options.CurrentGameMode != CustomGameMode.TOEX || Options.AllModMode.GetBool()) if (!AmongUsClient.Instance.AmHost) return;
         var taskState = GetPlayerById(Terrorist.PlayerId).GetPlayerTaskState();
         if (taskState.IsTaskFinished && (!Main.PlayerStates[Terrorist.PlayerId].IsSuicide() || Options.CanTerroristSuicideWin.GetBool())) //タスクが完了で（自殺じゃない OR 自殺勝ちが許可）されていれば
         {
@@ -998,7 +999,7 @@ public static class Utils
                     name = $"<color=#ffd6ec>TOHEX</color><color=#baf7ca>♡</color>" + name;
 #endif
 #if CANARY
-                        name = $"<color=#00e0c7>TOHEX测试房</color><color=#baf7ca>♦</color>" + name;
+                        name = $"<color=#00e0c7>Canary</color><color=#baf7ca>♦</color>" + name;
 #endif
                 if (Options.CurrentGameMode == CustomGameMode.SoloKombat)
                     name = $"<color=#f55252><size=1.7>{GetString("ModeSoloKombat")}</size></color>\r\n" + name;
@@ -1557,12 +1558,12 @@ public static class Utils
     public static void DumpOp()
     {
         string f = $"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}/TOHEX-op/";
-        string filename = "com.xi.townofhosteditedxi.cfg";
+        string filename = $"{Main.PluginGuid}.cfg";
         if (!Directory.Exists(f)) Directory.CreateDirectory(f);
-        FileInfo file = new(@$"{Environment.CurrentDirectory}/BepInEx/config/com.xi.townofhosteditedxi.cfg");
+        FileInfo file = new(@$"{Environment.CurrentDirectory}/BepInEx/config/{Main.PluginGuid}.cfg");
         file.CopyTo(@filename);
         if (PlayerControl.LocalPlayer != null)
-            HudManager.Instance?.Chat?.AddChat(PlayerControl.LocalPlayer, string.Format(GetString("Message.YSDC"), "com.xi.townofhosteditedxi.cfg"));
+            HudManager.Instance?.Chat?.AddChat(PlayerControl.LocalPlayer, string.Format(GetString("Message.YSDC"), $"{Main.PluginGuid}.cfg"));
         System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo("Explorer.exe")
         { Arguments = "/e,/select," + @filename.Replace("/", "\\") };
         System.Diagnostics.Process.Start(psi);

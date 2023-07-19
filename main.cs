@@ -59,6 +59,7 @@ public class Main : BasePlugin
     public static ConfigEntry<bool> EnableCustomButton { get; private set; }
     public static ConfigEntry<bool> EnableCustomSoundEffect { get; private set; }
     public static ConfigEntry<bool> SwitchVanilla { get; private set; }
+    public static ConfigEntry<bool> QSM { get; private set; }
     //public static ConfigEntry<bool> Devtx { get; private set; }
     //public static ConfigEntry<bool> FastBoot { get; private set; }
     public static ConfigEntry<bool> VersionCheat { get; private set; }
@@ -277,6 +278,7 @@ public class Main : BasePlugin
         EnableCustomButton = Config.Bind("Client Options", "EnableCustomButton", true);
         EnableCustomSoundEffect = Config.Bind("Client Options", "EnableCustomSoundEffect", true);
         SwitchVanilla = Config.Bind("Client Options", "SwitchVanilla", false);
+        QSM =  Config.Bind("Client Options", "QSM", false);
         //Devtx = Config.Bind("Client Options", "Devtx", false);
         //FastBoot = Config.Bind("Client Options", "FastBoot", false);
         VersionCheat = Config.Bind("Client Options", "VersionCheat", false);
@@ -292,7 +294,7 @@ public class Main : BasePlugin
         if (!DebugModeManager.AmDebugger)
         {
             TOHE.Logger.Disable("2018k");
-            TOHE.Logger.Disable("Github");
+            //TOHE.Logger.Disable("Github");
             TOHE.Logger.Disable("CustomRpcSender");
             //TOHE.Logger.Disable("ReceiveRPC");
             TOHE.Logger.Disable("SendRPC");

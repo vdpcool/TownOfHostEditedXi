@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MS.Internal.Xml.XPath;
 using TOHE.Roles.AddOns.Crewmate;
 using TOHE.Roles.AddOns.Impostor;
 using TOHE.Roles.Crewmate;
@@ -19,6 +20,7 @@ public enum CustomGameMode
     SoloKombat = 0x02,
     HotPotato = 0x03,
     ModeArrest = 0x04,
+    TOEX = 0x05,
     All = int.MaxValue
 }
 
@@ -58,12 +60,13 @@ public static class Options
             1 => CustomGameMode.SoloKombat,
             2 => CustomGameMode.HotPotato,
             3 => CustomGameMode.ModeArrest,
+            4 => CustomGameMode.TOEX,
             _ => CustomGameMode.Standard
         };
 
     public static readonly string[] gameModes =
     {
-        "Standard", "SoloKombat","HotPotato","ModeArrest"
+        "Standard", "SoloKombat","HotPotato","ModeArrest","TOEX"
     };
 
     // MapActive
@@ -422,6 +425,7 @@ public static class Options
     public static OptionItem SyncButtonMode;
     public static OptionItem SyncedButtonCount;
     public static int UsedButtonCount = 0;
+    public static OptionItem AllModMode;
 
     // 全員生存時の会議時間
     public static OptionItem AllAliveMeeting;
@@ -1327,8 +1331,7 @@ public static class Options
             .SetValueFormat(OptionFormat.Times);
         AutoKickStopWordsAsBan = BooleanOptionItem.Create(1_000_028, "AutoKickStopWordsAsBan", false, TabGroup.SystemSettings, false).SetParent(AutoKickStopWords);
         AutoWarnStopWords = BooleanOptionItem.Create(1_000_012, "AutoWarnStopWords", false, TabGroup.SystemSettings, false);
-        EACPLUS = BooleanOptionItem.Create(1_000_013, "EACPLUS", false, TabGroup.SystemSettings, false);
-
+        
         ShareLobby = BooleanOptionItem.Create(6090065, "ShareLobby", true, TabGroup.SystemSettings, false)
             .SetHeader(true)
             .SetColor(Color.cyan);
@@ -1345,6 +1348,7 @@ public static class Options
 
         CheatResponses = StringOptionItem.Create(6090121, "CheatResponses", CheatResponsesName, 0, TabGroup.SystemSettings, false)
             .SetHeader(true);
+        EACPLUS = BooleanOptionItem.Create(1_000_013, "EACPLUS", false, TabGroup.SystemSettings, false);
 
         //HighLevelAntiCheat = StringOptionItem.Create(6090123, "HighLevelAntiCheat", CheatResponsesName, 0, TabGroup.SystemSettings, false)
         //.SetHeader(true);
@@ -1388,19 +1392,22 @@ public static class Options
         Logger.Msg("开始加载游戏设置", "Load Options");
 
         #region 游戏设置
-
+        
         //SoloKombat
         SoloKombatManager.SetupCustomOption();
         //热土豆
         HotPotatoManager.SetupCustomOption();
         //抓捕
         //ModeArrestManager.SetupCustomOption();
+        AllModMode = BooleanOptionItem.Create(6090115, "AllModMode", false, TabGroup.GameSettings, false)
+            .SetGameMode(CustomGameMode.Standard)
+            .SetColor(new Color32(255, 153, 153, byte.MaxValue));
 
         //驱逐相关设定
         TextOptionItem.Create(66_123_126, "MenuTitle.Ejections", TabGroup.GameSettings)
             .SetGameMode(CustomGameMode.Standard)
             .SetColor(new Color32(255, 238, 232, byte.MaxValue));
-
+        
         CEMode = StringOptionItem.Create(6091223, "ConfirmEjectionsMode", ConfirmEjectionsMode, 2, TabGroup.GameSettings, false)
             .SetGameMode(CustomGameMode.Standard)
             .SetHeader(true)

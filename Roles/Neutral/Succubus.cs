@@ -50,7 +50,7 @@ public static class Succubus
         playerIdList.Add(playerId);
         CharmLimit = CharmMax.GetInt();
 
-        if (!AmongUsClient.Instance.AmHost) return;
+        if (Options.CurrentGameMode != CustomGameMode.TOEX || Options.AllModMode.GetBool()) if (!AmongUsClient.Instance.AmHost) return;
         if (!Main.ResetCamPlayerList.Contains(playerId))
             Main.ResetCamPlayerList.Add(playerId);
     }

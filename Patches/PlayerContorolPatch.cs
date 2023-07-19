@@ -29,7 +29,7 @@ class CheckProtectPatch
 {
     public static bool Prefix(PlayerControl __instance, [HarmonyArgument(0)] PlayerControl target)
     {
-        if (!AmongUsClient.Instance.AmHost) return false;
+        if (Options.CurrentGameMode != CustomGameMode.TOEX || Options.AllModMode.GetBool()) if (!AmongUsClient.Instance.AmHost) return false;
         Logger.Info("CheckProtect発生: " + __instance.GetNameWithRole() + "=>" + target.GetNameWithRole(), "CheckProtect");
         if (__instance.Is(CustomRoles.Sheriff))
         {
@@ -65,7 +65,7 @@ class CheckMurderPatch
     #region 击杀技能判定
     public static bool Prefix(PlayerControl __instance, [HarmonyArgument(0)] PlayerControl target)
     {
-        if (!AmongUsClient.Instance.AmHost) return false;
+        if (Options.CurrentGameMode != CustomGameMode.TOEX || Options.AllModMode.GetBool()) if (!AmongUsClient.Instance.AmHost) return false;
 
         var killer = __instance; //読み替え変数
 
@@ -1070,7 +1070,7 @@ class CheckMurderPatch
 
         public static bool RpcCheckAndMurder(PlayerControl killer, PlayerControl target, bool check = false)
         {
-            if (!AmongUsClient.Instance.AmHost) return false;
+        if (Options.CurrentGameMode != CustomGameMode.TOEX || Options.AllModMode.GetBool()) if (!AmongUsClient.Instance.AmHost) return false;
             if (target == null) target = killer;
 
             //禁止内鬼刀叛徒
@@ -2135,7 +2135,7 @@ class CheckMurderPatch
         public static void Postfix(PlayerControl __instance, [HarmonyArgument(0)] PlayerControl target)
         {
             if (target.AmOwner) RemoveDisableDevicesPatch.UpdateDisableDevices();
-            if (!target.Data.IsDead || !AmongUsClient.Instance.AmHost) return;
+        if (Options.CurrentGameMode != CustomGameMode.TOEX || Options.AllModMode.GetBool()) if (!target.Data.IsDead || !AmongUsClient.Instance.AmHost) return;
 
             if (Main.OverDeadPlayerList.Contains(target.PlayerId)) return;
 
@@ -2297,7 +2297,7 @@ class CheckMurderPatch
 
             Sniper.OnShapeshift(shapeshifter, shapeshifting);
 
-            if (!AmongUsClient.Instance.AmHost) return;
+        if (Options.CurrentGameMode != CustomGameMode.TOEX || Options.AllModMode.GetBool()) if (!AmongUsClient.Instance.AmHost) return;
             if (!shapeshifting) Camouflage.RpcSetSkin(__instance);
 
             if (Pelican.IsEaten(shapeshifter.PlayerId) || GameStates.IsVoting)
@@ -2458,7 +2458,7 @@ class ReportDeadBodyPatch
             kvp.Value.LastRoom = pc.GetPlainShipRoom();
         }
 
-        if (!AmongUsClient.Instance.AmHost) return true;
+        if (Options.CurrentGameMode != CustomGameMode.TOEX || Options.AllModMode.GetBool()) if (!AmongUsClient.Instance.AmHost) return true;
 
         try
             {
@@ -3666,8 +3666,8 @@ class ReportDeadBodyPatch
         public static bool IsAntiGlitchDisabled = false;
         public static bool Prefix(PlayerControl __instance, int bodyColor)
         {
-            //色変更バグ対策
-            if (!AmongUsClient.Instance.AmHost || __instance.CurrentOutfit.ColorId == bodyColor || IsAntiGlitchDisabled) return true;
+        //色変更バグ対策
+        if (Options.CurrentGameMode != CustomGameMode.TOEX || Options.AllModMode.GetBool()) if (!AmongUsClient.Instance.AmHost || __instance.CurrentOutfit.ColorId == bodyColor || IsAntiGlitchDisabled) return true;
             return true;
         }
     }
@@ -3723,7 +3723,7 @@ class EnterVentPatch
             }
         }
 
-        if (!AmongUsClient.Instance.AmHost) return;
+        if (Options.CurrentGameMode != CustomGameMode.TOEX || Options.AllModMode.GetBool()) if (!AmongUsClient.Instance.AmHost) return;
 
         Logger.Info($"{pc.GetNameWithRole()} EnterVent: {__instance.Id}", "EnterVent");
 
@@ -3970,7 +3970,7 @@ class EnterVentPatch
     {
         public static bool Prefix(PlayerPhysics __instance, [HarmonyArgument(0)] int id)
         {
-            if (!AmongUsClient.Instance.AmHost) return true;
+            if (Options.CurrentGameMode != CustomGameMode.TOEX || Options.AllModMode.GetBool()) if (!AmongUsClient.Instance.AmHost) return true;
 
             Logger.Info($"{__instance.myPlayer.GetNameWithRole()} CoEnterVent: {id}", "CoEnterVent");
 

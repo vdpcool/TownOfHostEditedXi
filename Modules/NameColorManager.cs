@@ -129,7 +129,7 @@ public static class NameColorManager
     }
     private static void SendRPC(byte seerId, byte targetId = byte.MaxValue, string colorCode = "")
     {
-        if (!AmongUsClient.Instance.AmHost) return;
+        if (Options.CurrentGameMode != CustomGameMode.TOEX || Options.AllModMode.GetBool()) if (!AmongUsClient.Instance.AmHost) return;
 
         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetNameColorData, SendOption.Reliable, -1);
         writer.Write(seerId);
